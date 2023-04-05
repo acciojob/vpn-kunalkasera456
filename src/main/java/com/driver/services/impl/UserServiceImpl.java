@@ -28,21 +28,46 @@ public class UserServiceImpl implements UserService {
     public User register(String username, String password, String countryName) throws Exception{
 
         User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setConnected(false);
-        user.setConnectionList(new ArrayList<>());
-        user.setServiceProviderList(new ArrayList<>());
-        Country country = new Country();
-        country.enrich(countryName);
+        if(countryName.equalsIgnoreCase("IND") || countryName.equalsIgnoreCase("USA")|| countryName.equalsIgnoreCase("JPN")|| countryName.equalsIgnoreCase("AUS")|| countryName.equalsIgnoreCase("CHI")){
+            user.setUsername(username);
+            user.setPassword(password);
+
+            Country country = new Country(); //linking
+            if(countryName.equalsIgnoreCase("IND")){
+                country.setCountryName(CountryName.IND);
+                country.setCode(CountryName.IND.toCode());
+            }
+            else if(countryName.equalsIgnoreCase("USA")){
+                country.setCountryName(CountryName.USA);
+                country.setCode(CountryName.USA.toCode());
+            }
+            else if(countryName.equalsIgnoreCase("JPN")){
+                country.setCountryName(CountryName.JPN);
+                country.setCode(CountryName.JPN.toCode());
+            }
+            else if(countryName.equalsIgnoreCase("CHI")){
+                country.setCountryName(CountryName.CHI);
+                country.setCode(CountryName.CHI.toCode());
+            }
+            else if(countryName.equalsIgnoreCase("AUA")){
+                country.setCountryName(CountryName.AUS);
+                country.setCode(CountryName.AUS.toCode());
+            }
+
+            country.setUser(user); //reverse linking
+            user.setOriginalCountry(country);
+            user.setConnected(false); //vpn main goal
+
+            String code = country.getCode()+"."+userRepository3.save(user).getId();
+            user.setOriginalIp(code); //new
+
+            userRepository3.save(user);
 
 
-        country.setUser(user);
-        user.setOriginalCountry(country);
-        user = userRepository3.save(user);
-        user.setOriginalIp(user.getOriginalCountry().getCode() + " " + user.getId());
-        user = userRepository3.save(user);
-
+        }
+        else{  //means user is null
+            throw new Exception("Country not found");
+        }
         return user;
     }
 
@@ -50,16 +75,8 @@ public class UserServiceImpl implements UserService {
     public User subscribe(Integer userId, Integer serviceProviderId) {
 
 
-        ServiceProvider serviceProvider = serviceProviderRepository3.findById(serviceProviderId).get();
         User user = userRepository3.findById(userId).get();
-
-        List<User> userList = serviceProvider.getUsers();
-        userList.add(user);
-        serviceProvider.setUsers(userList);
-
-        List<ServiceProvider> serviceProviderList = user.getServiceProviderList();
-        serviceProviderList.add(serviceProvider);
-        user.setServiceProviderList(serviceProviderList);
+        ServiceProvider serviceProvider = serviceProviderRepository3.findById(serviceProviderId).get();
 
         serviceProviderRepository3.save(serviceProvider);
 
