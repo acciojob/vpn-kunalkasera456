@@ -11,7 +11,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String userName;
+    private String username;
     private String password;
     private String originalIp;
     private String maskedIp;
@@ -26,21 +26,21 @@ public class User {
 
     @OneToOne
     @JoinColumn
-    private Country country;
+    private Country originalCountry;
 
     public User() {
     }
 
-    public User(int id, String userName, String password, String originalIp, String maskedIp, Boolean connected, List<ServiceProvider> serviceProviderList, List<Connection> connectionList, Country country) {
+    public User(int id, String username, String password, String originalIp, String maskedIp, Boolean connected, List<ServiceProvider> serviceProviderList, List<Connection> connectionList, Country originalCountry) {
         this.id = id;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.originalIp = originalIp;
         this.maskedIp = maskedIp;
         this.connected = connected;
         this.serviceProviderList = serviceProviderList;
         this.connectionList = connectionList;
-        this.country = country;
+        this.originalCountry = originalCountry;
     }
 
     public int getId() {
@@ -51,12 +51,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -107,11 +107,11 @@ public class User {
         this.connectionList = connectionList;
     }
 
-    public Country getCountry() {
-        return country;
+    public Country getOriginalCountry() {
+        return originalCountry;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setOriginalCountry(Country originalCountry) {
+        this.originalCountry = originalCountry;
     }
 }

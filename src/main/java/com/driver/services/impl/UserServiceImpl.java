@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public User register(String username, String password, String countryName) throws Exception{
 
         User user = new User();
-        user.setUserName(username);
+        user.setUsername(username);
         user.setPassword(password);
         user.setConnected(false);
         user.setConnectionList(new ArrayList<>());
@@ -38,9 +38,9 @@ public class UserServiceImpl implements UserService {
 
 
         country.setUser(user);
-        user.setCountry(country);
+        user.setOriginalCountry(country);
         user = userRepository3.save(user);
-        user.setOriginalIp(user.getCountry().getCode() + " " + user.getId());
+        user.setOriginalIp(user.getOriginalCountry().getCode() + " " + user.getId());
         user = userRepository3.save(user);
 
         return user;

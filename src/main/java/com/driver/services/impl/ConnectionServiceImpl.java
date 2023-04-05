@@ -27,7 +27,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         if (user.getConnected() || user.getMaskedIp() != null) {
             throw new Exception("Already connected");
         }
-        String currentCountry = String.valueOf(user.getCountry().getCountryName());
+        String currentCountry = String.valueOf(user.getOriginalCountry().getCountryName());
         if (currentCountry.equals(countryName)) {
             return user;
         }
@@ -116,7 +116,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             }
         } else {
-            receiverCountryName = receiver.getCountry().getCountryName();
+            receiverCountryName = receiver.getOriginalCountry().getCountryName();
         }
 
         User user = null;
